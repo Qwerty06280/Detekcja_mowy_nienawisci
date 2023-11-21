@@ -6,8 +6,12 @@ from googleapiclient.discovery import build
 from typing import List
 from urllib.parse import urlparse, parse_qs
 
-def get_id(url: str):
-    # function that extracts youtube video ID from a complete link
+def get_id(url: str) -> str:
+    """
+    Extracts youtube video ID from a complete link
+    :param url: link to youtube video
+    :return: extracted video ID
+    """
     u_pars = urlparse(url)
     quer_v = parse_qs(u_pars.query).get('v')
     if quer_v:
@@ -16,7 +20,13 @@ def get_id(url: str):
     if pth:
         return pth[-1].strip()
 
-def extract_comments(video_id: str, limit: int = 15000) -> List:
+def extract_comments(video_id: str, limit: int = 5000) -> List:
+    """
+    Extracts comments from a video
+    :param video_id: video_id_, value returned by get_id() function
+    :param limit: limit the max number of comments
+    :return: extracted comments -> List
+    """
     # function that extracts comments from a video
     # empty list for storing replies
     replies = []
@@ -67,8 +77,11 @@ def extract_comments(video_id: str, limit: int = 15000) -> List:
     return all_replies
 
 def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI'):
-    # function that takes url as an argument and extract various data from youtube video
-
+    """
+    Takes url as an argument and extract various data from youtube video
+    :param url: link to youtube video
+    :return: (dataframe with extracted comments, title of the video)
+    """
     youtube_link = url
     # extract video_id with function get_id()
     video_id = get_id(youtube_link)
