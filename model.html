@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>model</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cchill%5Cdesktop%5Cinzynierka%5Crepo%5Cinzynierka%5Cmodel.py">c:\users\chill\desktop\inzynierka\repo\inzynierka\model.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;Import&nbsp;libraries</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="spacy.html">spacy</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-Vectorize"><strong>Vectorize</strong></a>(method: str = 'Bag of Words', stop_words=None)</dt><dd><tt>:param&nbsp;method:&nbsp;Bag&nbsp;of&nbsp;Words&nbsp;or&nbsp;TF-IDF<br>
+:param&nbsp;stop_words:&nbsp;pass&nbsp;polish_stop_words&nbsp;or&nbsp;None<br>
+:return:&nbsp;Vectroizer</tt></dd></dl>
+ <dl><dt><a name="-lemmatize_text"><strong>lemmatize_text</strong></a>(text)</dt><dd><tt>Performs&nbsp;lemmatization&nbsp;of&nbsp;given&nbsp;text<br>
+:param&nbsp;text:&nbsp;data&nbsp;that&nbsp;needs&nbsp;to&nbsp;be&nbsp;lemmatized<br>
+:return:&nbsp;lemmatized&nbsp;text</tt></dd></dl>
+ <dl><dt><a name="-load_components"><strong>load_components</strong></a>(lemmatization_method: str = 'quick') -&gt; Tuple</dt><dd><tt>Loads&nbsp;neccesary&nbsp;components:&nbsp;polish_stop_words&nbsp;from&nbsp;a&nbsp;.txt&nbsp;file&nbsp;and&nbsp;data&nbsp;for&nbsp;lemmatization<br>
+:param&nbsp;lemmatization_method:&nbsp;pick&nbsp;which&nbsp;data&nbsp;should&nbsp;be&nbsp;loaded,&nbsp;smaller&nbsp;set&nbsp;but&nbsp;much&nbsp;quicker&nbsp;to&nbsp;process,&nbsp;or&nbsp;more&nbsp;advanced&nbsp;but&nbsp;slower<br>
+:return:&nbsp;polish_stop_words,&nbsp;nlp</tt></dd></dl>
+ <dl><dt><a name="-make_predictions"><strong>make_predictions</strong></a>(data, comments_col='Final_comment', target_col='Is_toxic', vectoraizer_name='Bag of Words', model_name='Logistic Regression', stop_words=None, test_size=0.2, n_splits=5)</dt><dd><tt>Core&nbsp;function,&nbsp;performs&nbsp;vectorization&nbsp;with&nbsp;function&nbsp;<a href="#-Vectorize">Vectorize</a>(),&nbsp;splits&nbsp;data&nbsp;into&nbsp;training&nbsp;and&nbsp;testing&nbsp;subsets,<br>
+creates&nbsp;model,&nbsp;perfors&nbsp;cross&nbsp;fold&nbsp;validation,&nbsp;trains&nbsp;model&nbsp;and&nbsp;makes&nbsp;predictions&nbsp;for&nbsp;test&nbsp;data<br>
+:param&nbsp;data:&nbsp;data<br>
+:param&nbsp;comments_col:&nbsp;column&nbsp;that&nbsp;we&nbsp;are&nbsp;going&nbsp;to&nbsp;use<br>
+:param&nbsp;target_col:&nbsp;column&nbsp;with&nbsp;labels<br>
+:param&nbsp;vectoraizer_name:&nbsp;pick&nbsp;vectorization&nbsp;method&nbsp;-&nbsp;'Bag&nbsp;of&nbsp;Words'or&nbsp;'TF-IDF'<br>
+:param&nbsp;model_name:&nbsp;pick&nbsp;model-&nbsp;'Logistic&nbsp;Regression',&nbsp;'SVM'&nbsp;or&nbsp;'Naive-Bayes'<br>
+:param&nbsp;stop_words:&nbsp;polish_stop_words&nbsp;or&nbsp;None<br>
+:param&nbsp;test_size:&nbsp;default&nbsp;=0.2<br>
+:param&nbsp;n_splits:&nbsp;n_splits&nbsp;for&nbsp;cross&nbsp;fold&nbsp;validation<br>
+:return:&nbsp;y_test,&nbsp;predictions,&nbsp;cv_scores</tt></dd></dl>
+ <dl><dt><a name="-prepare_data"><strong>prepare_data</strong></a>(data) -&gt; pandas.core.frame.DataFrame</dt><dd><tt>Performs&nbsp;preprocessing&nbsp;-&nbsp;adds&nbsp;two&nbsp;new&nbsp;columns&nbsp;to&nbsp;dataset.&nbsp;Cleans&nbsp;strings&nbsp;&amp;&nbsp;applies&nbsp;lemmatization<br>
+:param&nbsp;data:&nbsp;dataframe&nbsp;with&nbsp;column&nbsp;'Comment'<br>
+:return:&nbsp;dataframe&nbsp;with&nbsp;two&nbsp;new&nbsp;columns</tt></dd></dl>
+ <dl><dt><a name="-read_sample_data"><strong>read_sample_data</strong></a>(dataset: str = 'dataset_zwroty') -&gt; pandas.core.frame.DataFrame</dt><dd><tt>Reads&nbsp;sample&nbsp;data&nbsp;for&nbsp;the&nbsp;purpose&nbsp;of&nbsp;development,&nbsp;experimenting,&nbsp;modelling<br>
+:param&nbsp;dataset:&nbsp;sample&nbsp;data&nbsp;consists&nbsp;of&nbsp;3&nbsp;datasets.&nbsp;if&nbsp;dataset&nbsp;=&nbsp;None,&nbsp;then&nbsp;all&nbsp;data&nbsp;gets&nbsp;loaded.&nbsp;Other&nbsp;options:<br>
+['dataset_poleval',&nbsp;'dataset_zwroty',&nbsp;'dataset_wykop']<br>
+:return:&nbsp;dataframe&nbsp;with&nbsp;loaded&nbsp;data</tt></dd></dl>
+ <dl><dt><a name="-visualize_results"><strong>visualize_results</strong></a>(y_test, predictions, cv_scores, model_name: str, vectorizer_name: str)</dt><dd><tt>Creates&nbsp;and&nbsp;displays&nbsp;confusion&nbsp;matrix&nbsp;for&nbsp;given&nbsp;data<br>
+:param&nbsp;y_test:&nbsp;true&nbsp;labels<br>
+:param&nbsp;predictions:&nbsp;predicted&nbsp;labels<br>
+:param&nbsp;cv_scores:&nbsp;cross&nbsp;fold&nbsp;validation&nbsp;scored<br>
+:param&nbsp;model_name:&nbsp;name&nbsp;of&nbsp;model&nbsp;used<br>
+:param&nbsp;vectorizer_name:&nbsp;name&nbsp;of&nbsp;vectorization&nbsp;method&nbsp;used</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Tuple</strong> = typing.Tuple<br>
+<strong>data</strong> =                                                C...       1  dataset_zwroty
+
+[3815 rows x 3 columns]<br>
+<strong>df</strong> =                                                C...zystek kompletny dupk4mi
+
+[3815 rows x 5 columns]<br>
+<strong>logReg_pred</strong> = (11119    1
+11998    1
+12735    0
+12043    1
+1125...41    1
+Name: Is_toxic, Length: 763, dtype: int64, array([1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,...1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1], dtype=int64), array([0.92471358, 0.93126023, 0.93278689, 0.94262295, 0.93278689]))<br>
+<strong>nlp</strong> = &lt;spacy.lang.pl.Polish object&gt;<br>
+<strong>polish_stop_words</strong> = ['a', 'aby', 'ach', 'acz', 'aczkolwiek', 'aj', 'albo', 'ale', 'alez', 'ależ', 'ani', 'az', 'aż', 'bardziej', 'bardzo', 'beda', 'bedzie', 'bez', 'deda', 'będą', ...]</td></tr></table>
+</body></html>

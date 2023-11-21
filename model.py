@@ -1,11 +1,10 @@
-## Import libraries
-
+# Import libraries
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 # regex - cleaning
 import re
-# lematyzacja
+# lemmatization
 import spacy
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
@@ -19,17 +18,36 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 # Naive-Bayes
 from sklearn.naive_bayes import MultinomialNB
+from typing import Tuple
 
-##### Stop words - Polish
-with open(r'C:\Users\Chill\Desktop\INZYNIERKA\dane\polish_stopwords.txt', 'r', encoding='utf-8') as file:
-    polish_stop_words = [row.strip() for row in file]
-nlp = spacy.load('pl_core_news_sm')  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
 
-def read_sample_data(dataset: str = 'dataset_zwroty'):
+def load_components(lemmatization_method: str = 'quick') -> Tuple:
+    """
+    Loads neccesary components: polish_stop_words from a .txt file and data for lemmatization
+    :param lemmatization_method: pick which data should be loaded, smaller set but much quicker to process, or more advanced but slower
+    :return: polish_stop_words, nlp
+    """
+    with open(r'C:\Users\Chill\Desktop\INZYNIERKA\dane\polish_stopwords.txt', 'r', encoding='utf-8') as file:
+        polish_stop_words = [row.strip() for row in file]
+    if lemmatization_method == 'quick':
+        nlp = spacy.load('pl_core_news_sm')  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+    elif lemmatization_method == 'precise':
+        nlp = spacy.load('pl_core_news_lg')  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+    else:
+        raise ValueError("Wrong argument value")
+    return polish_stop_words, nlp
+
+def read_sample_data(dataset: str = 'dataset_zwroty') -> pd.DataFrame:
+    """
+    Reads sample data for the purpose of development, experimenting, modelling
+    :param dataset: sample data consists of 3 datasets. if dataset = None, then all data gets loaded. Other options:
+    ['dataset_poleval', 'dataset_zwroty', 'dataset_wykop']
+    :return: dataframe with loaded data
+    """
     # read data
     file_path_conc = r'C:\Users\Chill\Desktop\INZYNIERKA\dane\found_internet\CONCATENATED_DATA.xlsx'
     df = pd.read_excel(file_path_conc)
-    #'dataset_poleval', 'dataset_zwroty', 'dataset_wykop'
+
     if dataset is None:
         pass
     else:
@@ -37,11 +55,21 @@ def read_sample_data(dataset: str = 'dataset_zwroty'):
     return df
 
 def lemmatize_text(text):
+    """
+    Performs lemmatization of given text
+    :param text: data that needs to be lemmatized
+    :return: lemmatized text
+    """
     # Lematyzacja
     doc = nlp(text)
     return ' '.join([token.lemma_ for token in doc])
 
-def prepare_data(data):
+def prepare_data(data) -> pd.DataFrame:
+    """
+    Performs preprocessing - adds two new columns to dataset. Cleans strings & applies lemmatization
+    :param data: dataframe with column 'Comment'
+    :return: dataframe with two new columns
+    """
     # Cleaning
     # replace with empty string (delete) any character that is not: whitespace, a number, a character a-z or underscore
     df = data.copy()
@@ -52,18 +80,36 @@ def prepare_data(data):
         raise Exception("Input 'df' missing column 'Comment'")
     return df
 
-def Vectorize(method='Bag of Words', stop_words=None):
+def Vectorize(method :str='Bag of Words', stop_words=None):
+    """
+    :param method: Bag of Words or TF-IDF
+    :param stop_words: pass polish_stop_words or None
+    :return: Vectroizer
+    """
     # Tokenization & Vectorization
     if method == 'Bag of Words':
-        vectorizer = CountVectorizer(lowercase=True, stop_words=polish_stop_words)  # TODO parametry
+        vectorizer = CountVectorizer(lowercase=True, stop_words=stop_words)  # TODO parametry
     elif method == 'TF-IDF':
-        vectorizer = TfidfVectorizer(lowercase=True, stop_words=polish_stop_words)  # TODO parametry
+        vectorizer = TfidfVectorizer(lowercase=True, stop_words=stop_words)  # TODO parametry
     else:
         raise ValueError("Method not found")
     return vectorizer
 
 def make_predictions(data, comments_col='Final_comment', target_col='Is_toxic', vectoraizer_name='Bag of Words',
                      model_name='Logistic Regression', stop_words=None, test_size=0.2, n_splits=5):
+    """
+    Core function, performs vectorization with function Vectorize(), splits data into training and testing subsets,
+    creates model, perfors cross fold validation, trains model and makes predictions for test data
+    :param data: data
+    :param comments_col: column that we are going to use
+    :param target_col: column with labels
+    :param vectoraizer_name: pick vectorization method - 'Bag of Words'or 'TF-IDF'
+    :param model_name: pick model- 'Logistic Regression', 'SVM' or 'Naive-Bayes'
+    :param stop_words: polish_stop_words or None
+    :param test_size: default =0.2
+    :param n_splits: n_splits for cross fold validation
+    :return: y_test, predictions, cv_scores
+    """
     vectorizer = Vectorize(method=vectoraizer_name, stop_words=stop_words)
     X = vectorizer.fit_transform(data[comments_col])
     # Split data to training and testing set
@@ -93,6 +139,14 @@ def make_predictions(data, comments_col='Final_comment', target_col='Is_toxic', 
     return y_test, predictions, cv_scores
 
 def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorizer_name: str):
+    """
+    Creates and displays confusion matrix for given data
+    :param y_test: true labels
+    :param predictions: predicted labels
+    :param cv_scores: cross fold validation scored
+    :param model_name: name of model used
+    :param vectorizer_name: name of vectorization method used
+    """
     cm = confusion_matrix(y_test, predictions)
     cm_display = ConfusionMatrixDisplay(confusion_matrix=cm)
     print(f"MODEL - {model_name.upper()}")
@@ -104,6 +158,7 @@ def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorize
     plt.show()
     print("\n--------------------------------------------------------\n")
 
+polish_stop_words, nlp = load_components(lemmatization_method='quick')
 data = read_sample_data('dataset_zwroty')
 df = prepare_data(data)
 
