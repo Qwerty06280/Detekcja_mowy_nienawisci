@@ -19,6 +19,7 @@ from sklearn.svm import SVC
 # Naive-Bayes
 from sklearn.naive_bayes import MultinomialNB
 from typing import Tuple
+from joblib import dump
 
 
 def load_components(lemmatization_method: str = 'quick') -> Tuple:
@@ -108,7 +109,7 @@ def make_predictions(data, comments_col='Final_comment', target_col='Is_toxic', 
     :param stop_words: polish_stop_words or None
     :param test_size: default =0.2
     :param n_splits: n_splits for cross fold validation
-    :return: y_test, predictions, cv_scores
+    :return: y_test, predictions, cv_scores, model
     """
     vectorizer = Vectorize(method=vectoraizer_name, stop_words=stop_words)
     X = vectorizer.fit_transform(data[comments_col])
@@ -136,7 +137,7 @@ def make_predictions(data, comments_col='Final_comment', target_col='Is_toxic', 
     # PREDICT
     predictions = model.predict(X_test)
 
-    return y_test, predictions, cv_scores
+    return y_test, predictions, cv_scores, model
 
 def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorizer_name: str):
     """
@@ -158,28 +159,97 @@ def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorize
     plt.show()
     print("\n--------------------------------------------------------\n")
 
-polish_stop_words, nlp = load_components(lemmatization_method='quick')
-data = read_sample_data('dataset_zwroty')
+polish_stop_words, nlp = load_components(lemmatization_method='precise')
+data = read_sample_data(None)
 df = prepare_data(data)
 
-# BoW & LogReg
-logReg_pred = make_predictions(data=df,
-                               comments_col='Final_comment',
-                               target_col='Is_toxic',
-                               vectoraizer_name='Bag of Words',
-                               model_name='Logistic Regression',
-                               stop_words=polish_stop_words,
-                               test_size=0.2,
-                               n_splits=5)
 
-visualize_results(y_test=logReg_pred[0],
-                  predictions=logReg_pred[1],
-                  cv_scores=logReg_pred[2],
-                  model_name='Logisitic Regression',
-                  vectorizer_name='Bag of Words')
+bow = Vectorize('Bag of Words', stop_words=polish_stop_words)
+X = bow.fit_transform(df["Final_comment"])
+tfidf = Vectorize('TF-IDF', stop_words=polish_stop_words)
+X2 = tfidf.fit_transform(df["Final_comment"])
+dump(bow, 'models_trained/BoW.joblib')
+dump(tfidf, 'models_trained/TFIDF.joblib')
+
+# # BoW & LogReg
+# logReg_pred = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'Bag of Words',
+#                             model_name = 'Logistic Regression',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
+#
+# svm_pred = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'Bag of Words',
+#                             model_name = 'SVM',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
+#
+# nb_pred = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'Bag of Words',
+#                             model_name = 'Naive-Bayes',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
+#
+# # TF-IDF
+# logReg_pred_idf = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'TF-IDF',
+#                             model_name = 'Logistic Regression',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
+#
+# svm_pred_idf = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'TF-IDF',
+#                             model_name = 'SVM',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
+#
+# nb_pred_idf = make_predictions(data = df,
+#                             comments_col = 'Final_comment',
+#                             target_col  = 'Is_toxic',
+#                             vectoraizer_name = 'TF-IDF',
+#                             model_name = 'Naive-Bayes',
+#                             stop_words = polish_stop_words,
+#                             test_size = 0.2,
+#                             n_splits=5)
 
 
-# df_added_pred = df.loc[list(logReg_pred[0].index)]
-# df_added_pred['prediction'] = logReg_pred[1]
-# df_added_pred[df_added_pred['Is_toxic'] != df_added_pred['prediction']]
+# visualize_results(y_test=logReg_pred[0],
+#                   predictions=logReg_pred[1],
+#                   cv_scores=logReg_pred[2],
+#                   model_name='Logisitic Regression',
+#                   vectorizer_name='Bag of Words')
 
+
+# # TRAINING MODELS
+# model_LogReg_BoW = logReg_pred[3]
+# dump(model_LogReg_BoW, 'models_trained/model_LogReg_BoW.joblib')
+#
+# model_SVM_BoW = svm_pred[3]
+# dump(model_SVM_BoW, 'models_trained/model_SVM_BoW.joblib')
+#
+# model_NB_BoW = nb_pred[3]
+# dump(model_NB_BoW, 'models_trained/model_NB_BoW.joblib')
+#
+# model_LogReg_TFIDF = logReg_pred_idf[3]
+# dump(model_LogReg_TFIDF, 'models_trained/model_LogReg_TFIDF.joblib')
+#
+# model_SVM_TFIDF = svm_pred_idf[3]
+# dump(model_SVM_TFIDF, 'models_trained/model_SVM_TFIDF.joblib')
+#
+# model_NB_TFIDF = nb_pred_idf[3]
+# dump(model_NB_TFIDF, 'models_trained/model_NB_TFIDF.joblib')

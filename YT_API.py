@@ -20,7 +20,7 @@ def get_id(url: str) -> str:
     if pth:
         return pth[-1].strip()
 
-def extract_comments(video_id: str, limit: int = 5000) -> List:
+def extract_comments(video_id: str, limit: int = 10) -> List:
     """
     Extracts comments from a video
     :param video_id: video_id_, value returned by get_id() function
@@ -34,12 +34,17 @@ def extract_comments(video_id: str, limit: int = 5000) -> List:
     # creating youtube resource object
     yt_api_key = os.environ.get('YT_API_KEY')
     yt_connection = build('youtube', 'v3', developerKey=yt_api_key)
-
+    # for indexing purpose
+    limit = limit -1
+    if limit < 100:
+        max_Results = limit
+    else:
+        max_Results = 100
     # retrieve youtube video results
     video_response = yt_connection.commentThreads().list(
         part='snippet,replies',
         videoId=video_id,
-        maxResults=100  # MAX 100
+        maxResults=max_Results  # MAX 100
     ).execute()
     # iterate video response
     while video_response:
@@ -64,19 +69,23 @@ def extract_comments(video_id: str, limit: int = 5000) -> List:
             replies = []
         if len(all_replies) > limit:
             break
+        elif limit - len(all_replies) < 100:
+            max_Results2 = (limit - len(all_replies))
+        else:
+            max_Results2 = 100
         # Again repeat
         if 'nextPageToken' in video_response:
             video_response = yt_connection.commentThreads().list(
                 part='snippet,replies',
                 videoId=video_id,
-                maxResults=100,
+                maxResults=max_Results2,
                 pageToken=video_response['nextPageToken']
             ).execute()
         else:
             break
     return all_replies
 
-def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI'):
+def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI', limit: int = 10):
     """
     Takes url as an argument and extract various data from youtube video
     :param url: link to youtube video
@@ -90,7 +99,7 @@ def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI'):
     yt_connection = build('youtube', 'v3', developerKey=yt_api_key)
 
     # Extract comments with function extract_comments()
-    result = extract_comments(video_id)
+    result = extract_comments(video_id, limit = limit)
 
     # get the title of the video
     response_title = yt_connection.videos().list(
@@ -102,7 +111,7 @@ def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI'):
     df_comments = pd.DataFrame({"Comment": result})
     return df_comments, video_title
 
-comments, title = yt_extract()
+comments, title = yt_extract(limit = 4)
 print("Video title:\n{}\n\nNumber of comments that have been found: \n{}".format(title, len(comments)))
 print(comments.tail(10))
 
