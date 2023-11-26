@@ -1,7 +1,6 @@
 # Import libraries
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 # regex - cleaning
 import re
 # lemmatization
@@ -55,7 +54,7 @@ def read_sample_data(dataset: str = 'dataset_zwroty') -> pd.DataFrame:
         df = df[df['source'] == dataset]
     return df
 
-def lemmatize_text(text):
+def lemmatize_text(text,nlp):
     """
     Performs lemmatization of given text
     :param text: data that needs to be lemmatized
@@ -65,7 +64,7 @@ def lemmatize_text(text):
     doc = nlp(text)
     return ' '.join([token.lemma_ for token in doc])
 
-def prepare_data(data) -> pd.DataFrame:
+def prepare_data(data,nlp) -> pd.DataFrame:
     """
     Performs preprocessing - adds two new columns to dataset. Cleans strings & applies lemmatization
     :param data: dataframe with column 'Comment'
@@ -76,7 +75,7 @@ def prepare_data(data) -> pd.DataFrame:
     df = data.copy()
     try:
         df['Clean_comment'] = df['Comment'].str.lower().apply(lambda row: re.sub(r'[^\w\s]', '', row))
-        df['Final_comment'] = df['Clean_comment'].apply(lemmatize_text)
+        df['Final_comment'] = df['Clean_comment'].apply(lambda x: lemmatize_text(x, nlp))
     except:
         raise Exception("Input 'df' missing column 'Comment'")
     return df
@@ -96,7 +95,7 @@ def Vectorize(method :str='Bag of Words', stop_words=None):
         raise ValueError("Method not found")
     return vectorizer
 
-def load_model(vectoraizer_name='Bag of Words', model_name='Logistic Regression'):
+def load_model_and_vectorizer(vectoraizer_name='Bag of Words', model_name='Logistic Regression'):
     # VECTORAIZER
     if vectoraizer_name == 'Bag of Words':
         vect = 'BoW'
@@ -115,40 +114,28 @@ def load_model(vectoraizer_name='Bag of Words', model_name='Logistic Regression'
         raise ValueError("Model name is invalid")
     mod_vec_str = f"models_trained/model_{mod}_{vect}"
     loaded_model = load(f'{mod_vec_str}.joblib')
+    loaded_vectorizer = load(f'models_trained/{vect}.joblib')
+    return loaded_model, loaded_vectorizer
 
-    return loaded_model
-
-def make_predictions(model, comments, comments_col='Final_comment', vectoraizer_name = 'Bag of Words', stop_words=None, test_size=0.2, n_splits=5):
+def make_predictions(model, comments, vectoraizer, comments_col='Final_comment', stop_words=None, test_size=0.2, n_splits=5):
     """
-    Core function, performs vectorization with function Vectorize(), splits data into training and testing subsets,
-    creates model, perfors cross fold validation, trains model and makes predictions for test data
-    :param comments: data
-    :param comments_col: column that we are going to use
-    :param vectoraizer_name: pick vectorization method - 'Bag of Words'or 'TF-IDF'
-    :param model_name: pick model- 'Logistic Regression', 'SVM' or 'Naive-Bayes'
-    :param stop_words: polish_stop_words or None
-    :param test_size: default =0.2
-    :param n_splits: n_splits for cross fold validation
-    :return: y_test, predictions, cv_scores, model
     """
-    vectorizer = Vectorize(method=vectoraizer_name, stop_words=stop_words)
-    X = vectorizer.fit_transform(comments[comments_col])
-    # PREDICT
-    print(X)
+    # vectorization
+    X = vectoraizer.transform(comments[comments_col])
+    # prediciton
     predictions = model.predict(X)
+    return predictions
 
-    return X, predictions, model
-
-yt_data = pd.DataFrame({"Comment":["test","test dwa"]})
-print(yt_data)
-vect_name = 'Bag of Words'
-model_name = 'Logistic Regression'
-yt_model = load_model(vect_name,model_name)
-polish_stop_words, nlp = load_components(lemmatization_method='quick')
-yt_df = prepare_data(yt_data)
-test_prediction = make_predictions(model = yt_model,
-                                comments = yt_df,
-                                comments_col = 'Final_comment',
-                                vectoraizer_name = vect_name,
-                                stop_words = polish_stop_words)
-print(test_prediction)
+def youtube_detection(yt_comment, vect_name= 'Bag of Words', model_name= 'Logistic Regression', lemmatization= 'quick'):
+    # load model and vectorizer
+    model, vectorizer = load_model_and_vectorizer(vect_name, model_name)
+    # load components
+    polish_stop_words, nlp = load_components(lemmatization_method=lemmatization)
+    # prepare data - processing
+    yt_df = prepare_data(yt_comment,nlp)
+    yt_predicted = make_predictions(model=model,
+                                    comments=yt_df,
+                                    vectoraizer=vectorizer,
+                                    comments_col='Final_comment',
+                                    stop_words=polish_stop_words)
+    return yt_predicted

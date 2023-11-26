@@ -159,18 +159,10 @@ def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorize
     plt.show()
     print("\n--------------------------------------------------------\n")
 
-polish_stop_words, nlp = load_components(lemmatization_method='precise')
-data = read_sample_data(None)
-df = prepare_data(data)
-
-
-bow = Vectorize('Bag of Words', stop_words=polish_stop_words)
-X = bow.fit_transform(df["Final_comment"])
-tfidf = Vectorize('TF-IDF', stop_words=polish_stop_words)
-X2 = tfidf.fit_transform(df["Final_comment"])
-dump(bow, 'models_trained/BoW.joblib')
-dump(tfidf, 'models_trained/TFIDF.joblib')
-
+# polish_stop_words, nlp = load_components(lemmatization_method='precise')
+# data = read_sample_data(None)
+# df = prepare_data(data)
+#
 # # BoW & LogReg
 # logReg_pred = make_predictions(data = df,
 #                             comments_col = 'Final_comment',
@@ -228,11 +220,11 @@ dump(tfidf, 'models_trained/TFIDF.joblib')
 #                             n_splits=5)
 
 
-# visualize_results(y_test=logReg_pred[0],
-#                   predictions=logReg_pred[1],
-#                   cv_scores=logReg_pred[2],
-#                   model_name='Logisitic Regression',
-#                   vectorizer_name='Bag of Words')
+visualize_results(y_test=logReg_pred[0],
+                  predictions=logReg_pred[1],
+                  cv_scores=logReg_pred[2],
+                  model_name='Logisitic Regression',
+                  vectorizer_name='Bag of Words')
 
 
 # # TRAINING MODELS

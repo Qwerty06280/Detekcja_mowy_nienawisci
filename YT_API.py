@@ -111,7 +111,8 @@ def yt_extract(url: str = 'https://www.youtube.com/watch?v=v7CQkivQNQI', limit: 
     df_comments = pd.DataFrame({"Comment": result})
     return df_comments, video_title
 
-comments, title = yt_extract(limit = 4)
-print("Video title:\n{}\n\nNumber of comments that have been found: \n{}".format(title, len(comments)))
-print(comments.tail(10))
+## test
+# comments, title = yt_extract(limit = 4)
+# print("Video title:\n{}\n\nNumber of comments that have been found: \n{}".format(title, len(comments)))
+# print(comments.tail(10))
 

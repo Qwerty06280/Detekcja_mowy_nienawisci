@@ -92,3 +92,23 @@
 #
 # model_NB_TFIDF = nb_pred_idf[3]
 # dump(model_NB_TFIDF, 'models_trained/model_NB_TFIDF.joblib')
+
+
+# # PARAMETR VECTORIZER
+# label_vect_name = tk.Label(window, text="Wybierz metodę wektoryzacji:")
+# label_vect_name.pack(padx=10, pady=(10,0))
+# tk.Radiobutton(window, text="Bag of Words", variable=vect_name_var, value="Bag of Words").pack()
+# tk.Radiobutton(window, text="TF-IDF", variable=vect_name_var, value="TF-IDF").pack()
+#
+# # PARAMETR MODEL
+# label_model_name = tk.Label(window, text="Wybierz model uczenia maszynowego:")
+# label_model_name.pack(padx=10, pady=(10,0))
+# tk.Radiobutton(window, text="Logistic Regression", variable=model_name_var, value="Logistic Regression").pack()
+# tk.Radiobutton(window, text="SVM", variable=model_name_var, value="SVM").pack()
+# tk.Radiobutton(window, text="Naive Bayes", variable=model_name_var, value="Naive Bayes").pack()
+#
+# # PARAMETR LEMMATIZATION
+# label_lemmatization = tk.Label(window, text="Wybierz precyzję lematyzacji:")
+# label_lemmatization.pack(padx=10, pady=(10,0))
+# tk.Radiobutton(window, text="Precyzyjna", variable=lemmatization_var, value="precise").pack()
+# tk.Radiobutton(window, text="Szybka", variable=lemmatization_var, value="quick").pack()
