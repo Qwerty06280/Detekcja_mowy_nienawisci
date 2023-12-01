@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module yt_detection</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>yt_detection</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cchill%5Cdesktop%5Cinzynierka%5Crepo%5Cinzynierka%5Cyt_detection.py">c:\users\chill\desktop\inzynierka\repo\inzynierka\yt_detection.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;Import&nbsp;libraries</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="spacy.html">spacy</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-Vectorize"><strong>Vectorize</strong></a>(method: str = 'Bag of Words', stop_words=None)</dt><dd><tt>:param&nbsp;method:&nbsp;Bag&nbsp;of&nbsp;Words&nbsp;or&nbsp;TF-IDF<br>
+:param&nbsp;stop_words:&nbsp;pass&nbsp;polish_stop_words&nbsp;or&nbsp;None<br>
+:return:&nbsp;Vectroizer</tt></dd></dl>
+ <dl><dt><a name="-lemmatize_text"><strong>lemmatize_text</strong></a>(text, nlp)</dt><dd><tt>Performs&nbsp;lemmatization&nbsp;of&nbsp;given&nbsp;text<br>
+:param&nbsp;text:&nbsp;data&nbsp;that&nbsp;needs&nbsp;to&nbsp;be&nbsp;lemmatized<br>
+:return:&nbsp;lemmatized&nbsp;text</tt></dd></dl>
+ <dl><dt><a name="-load_components"><strong>load_components</strong></a>(lemmatization_method: str = 'quick') -&gt; Tuple</dt><dd><tt>Loads&nbsp;neccesary&nbsp;components:&nbsp;polish_stop_words&nbsp;from&nbsp;a&nbsp;.txt&nbsp;file&nbsp;and&nbsp;data&nbsp;for&nbsp;lemmatization<br>
+:param&nbsp;lemmatization_method:&nbsp;pick&nbsp;which&nbsp;data&nbsp;should&nbsp;be&nbsp;loaded,&nbsp;smaller&nbsp;set&nbsp;but&nbsp;much&nbsp;quicker&nbsp;to&nbsp;process,&nbsp;or&nbsp;more&nbsp;advanced&nbsp;but&nbsp;slower<br>
+:return:&nbsp;polish_stop_words,&nbsp;nlp</tt></dd></dl>
+ <dl><dt><a name="-load_model_and_vectorizer"><strong>load_model_and_vectorizer</strong></a>(vectoraizer_name='Bag of Words', model_name='Logistic Regression')</dt><dd><tt>Loads&nbsp;saved&nbsp;model&nbsp;and&nbsp;vectorizer&nbsp;based&nbsp;on&nbsp;parameters<br>
+:param&nbsp;vectoraizer_name:&nbsp;Bag&nbsp;of&nbsp;Words&nbsp;or&nbsp;TF-IDF<br>
+:param&nbsp;model_name:&nbsp;Logistic&nbsp;Regression,&nbsp;SVM&nbsp;or&nbsp;Naive-Bayes<br>
+:return:&nbsp;loaded_model,&nbsp;loaded_vectorizer</tt></dd></dl>
+ <dl><dt><a name="-make_predictions"><strong>make_predictions</strong></a>(model, comments, vectoraizer, comments_col='Final_comment')</dt><dd><tt>based&nbsp;on&nbsp;loaded&nbsp;model&nbsp;and&nbsp;vectorizer&nbsp;performs&nbsp;prediction&nbsp;on&nbsp;given&nbsp;data&nbsp;(comments)<br>
+:param&nbsp;model:&nbsp;loaded&nbsp;model<br>
+:param&nbsp;comments:&nbsp;comments&nbsp;that&nbsp;we&nbsp;need&nbsp;to&nbsp;be&nbsp;analyzed<br>
+:param&nbsp;vectoraizer:&nbsp;loaded&nbsp;vectorizer<br>
+:param&nbsp;comments_col:&nbsp;column&nbsp;with&nbsp;comments&nbsp;that&nbsp;we&nbsp;want&nbsp;to&nbsp;process<br>
+:return:&nbsp;predictions</tt></dd></dl>
+ <dl><dt><a name="-prepare_data"><strong>prepare_data</strong></a>(data, nlp) -&gt; pandas.core.frame.DataFrame</dt><dd><tt>Performs&nbsp;preprocessing&nbsp;-&nbsp;adds&nbsp;two&nbsp;new&nbsp;columns&nbsp;to&nbsp;dataset.&nbsp;Cleans&nbsp;strings&nbsp;&amp;&nbsp;applies&nbsp;lemmatization<br>
+:param&nbsp;data:&nbsp;dataframe&nbsp;with&nbsp;column&nbsp;'Comment'<br>
+:return:&nbsp;dataframe&nbsp;with&nbsp;two&nbsp;new&nbsp;columns</tt></dd></dl>
+ <dl><dt><a name="-read_sample_data"><strong>read_sample_data</strong></a>(dataset: str = 'dataset_zwroty') -&gt; pandas.core.frame.DataFrame</dt><dd><tt>Reads&nbsp;sample&nbsp;data&nbsp;for&nbsp;the&nbsp;purpose&nbsp;of&nbsp;development,&nbsp;experimenting,&nbsp;modelling<br>
+:param&nbsp;dataset:&nbsp;sample&nbsp;data&nbsp;consists&nbsp;of&nbsp;3&nbsp;datasets.&nbsp;if&nbsp;dataset&nbsp;=&nbsp;None,&nbsp;then&nbsp;all&nbsp;data&nbsp;gets&nbsp;loaded.&nbsp;Other&nbsp;options:<br>
+['dataset_poleval',&nbsp;'dataset_zwroty',&nbsp;'dataset_wykop']<br>
+:return:&nbsp;dataframe&nbsp;with&nbsp;loaded&nbsp;data</tt></dd></dl>
+ <dl><dt><a name="-youtube_detection"><strong>youtube_detection</strong></a>(yt_comment, vect_name='Bag of Words', model_name='Logistic Regression', lemmatization='quick')</dt><dd><tt>Performs&nbsp;classification&nbsp;on&nbsp;toxic&nbsp;and&nbsp;non-toxic&nbsp;yt_comments&nbsp;with&nbsp;parameters&nbsp;based&nbsp;on&nbsp;given&nbsp;arguments<br>
+:param&nbsp;yt_comment:&nbsp;extracted&nbsp;comments&nbsp;from&nbsp;a&nbsp;youtube&nbsp;video<br>
+:param&nbsp;vect_name:&nbsp;Bag&nbsp;of&nbsp;Words&nbsp;or&nbsp;TF-IDF<br>
+:param&nbsp;model_name:&nbsp;Logistic&nbsp;Regression,&nbsp;SVM&nbsp;or&nbsp;Naive-Bayes<br>
+:param&nbsp;lemmatization:&nbsp;'quick'&nbsp;or&nbsp;'precise'<br>
+:return:&nbsp;classified&nbsp;yt_comments&nbsp;based&nbsp;on&nbsp;given&nbsp;arguments</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Tuple</strong> = typing.Tuple</td></tr></table>
+</body></html>

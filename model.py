@@ -220,11 +220,11 @@ def visualize_results(y_test, predictions, cv_scores, model_name: str, vectorize
 #                             n_splits=5)
 
 
-visualize_results(y_test=logReg_pred[0],
-                  predictions=logReg_pred[1],
-                  cv_scores=logReg_pred[2],
-                  model_name='Logisitic Regression',
-                  vectorizer_name='Bag of Words')
+# visualize_results(y_test=logReg_pred[0],
+#                   predictions=logReg_pred[1],
+#                   cv_scores=logReg_pred[2],
+#                   model_name='Logisitic Regression',
+#                   vectorizer_name='Bag of Words')
 
 
 # # TRAINING MODELS

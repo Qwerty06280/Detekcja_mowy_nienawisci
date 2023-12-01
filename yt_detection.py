@@ -96,6 +96,12 @@ def Vectorize(method :str='Bag of Words', stop_words=None):
     return vectorizer
 
 def load_model_and_vectorizer(vectoraizer_name='Bag of Words', model_name='Logistic Regression'):
+    """
+    Loads saved model and vectorizer based on parameters
+    :param vectoraizer_name: Bag of Words or TF-IDF
+    :param model_name: Logistic Regression, SVM or Naive-Bayes
+    :return: loaded_model, loaded_vectorizer
+    """
     # VECTORAIZER
     if vectoraizer_name == 'Bag of Words':
         vect = 'BoW'
@@ -117,8 +123,14 @@ def load_model_and_vectorizer(vectoraizer_name='Bag of Words', model_name='Logis
     loaded_vectorizer = load(f'models_trained/{vect}.joblib')
     return loaded_model, loaded_vectorizer
 
-def make_predictions(model, comments, vectoraizer, comments_col='Final_comment', stop_words=None, test_size=0.2, n_splits=5):
+def make_predictions(model, comments, vectoraizer, comments_col='Final_comment'):
     """
+    based on loaded model and vectorizer performs prediction on given data (comments)
+    :param model: loaded model
+    :param comments: comments that we need to be analyzed
+    :param vectoraizer: loaded vectorizer
+    :param comments_col: column with comments that we want to process
+    :return: predictions
     """
     # vectorization
     X = vectoraizer.transform(comments[comments_col])
@@ -127,6 +139,14 @@ def make_predictions(model, comments, vectoraizer, comments_col='Final_comment',
     return predictions
 
 def youtube_detection(yt_comment, vect_name= 'Bag of Words', model_name= 'Logistic Regression', lemmatization= 'quick'):
+    """
+    Performs classification on toxic and non-toxic yt_comments with parameters based on given arguments
+    :param yt_comment: extracted comments from a youtube video
+    :param vect_name: Bag of Words or TF-IDF
+    :param model_name: Logistic Regression, SVM or Naive-Bayes
+    :param lemmatization: 'quick' or 'precise'
+    :return: classified yt_comments based on given arguments
+    """
     # load model and vectorizer
     model, vectorizer = load_model_and_vectorizer(vect_name, model_name)
     # load components
@@ -136,6 +156,5 @@ def youtube_detection(yt_comment, vect_name= 'Bag of Words', model_name= 'Logist
     yt_predicted = make_predictions(model=model,
                                     comments=yt_df,
                                     vectoraizer=vectorizer,
-                                    comments_col='Final_comment',
-                                    stop_words=polish_stop_words)
+                                    comments_col='Final_comment')
     return yt_predicted

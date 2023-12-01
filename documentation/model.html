@@ -48,7 +48,7 @@ creates&nbsp;model,&nbsp;perfors&nbsp;cross&nbsp;fold&nbsp;validation,&nbsp;trai
 :param&nbsp;stop_words:&nbsp;polish_stop_words&nbsp;or&nbsp;None<br>
 :param&nbsp;test_size:&nbsp;default&nbsp;=0.2<br>
 :param&nbsp;n_splits:&nbsp;n_splits&nbsp;for&nbsp;cross&nbsp;fold&nbsp;validation<br>
-:return:&nbsp;y_test,&nbsp;predictions,&nbsp;cv_scores</tt></dd></dl>
+:return:&nbsp;y_test,&nbsp;predictions,&nbsp;cv_scores,&nbsp;model</tt></dd></dl>
  <dl><dt><a name="-prepare_data"><strong>prepare_data</strong></a>(data) -&gt; pandas.core.frame.DataFrame</dt><dd><tt>Performs&nbsp;preprocessing&nbsp;-&nbsp;adds&nbsp;two&nbsp;new&nbsp;columns&nbsp;to&nbsp;dataset.&nbsp;Cleans&nbsp;strings&nbsp;&amp;&nbsp;applies&nbsp;lemmatization<br>
 :param&nbsp;data:&nbsp;dataframe&nbsp;with&nbsp;column&nbsp;'Comment'<br>
 :return:&nbsp;dataframe&nbsp;with&nbsp;two&nbsp;new&nbsp;columns</tt></dd></dl>
@@ -69,19 +69,5 @@ creates&nbsp;model,&nbsp;perfors&nbsp;cross&nbsp;fold&nbsp;validation,&nbsp;trai
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>Tuple</strong> = typing.Tuple<br>
-<strong>data</strong> =                                                C...       1  dataset_zwroty
-
-[3815 rows x 3 columns]<br>
-<strong>df</strong> =                                                C...zystek kompletny dupk4mi
-
-[3815 rows x 5 columns]<br>
-<strong>logReg_pred</strong> = (11119    1
-11998    1
-12735    0
-12043    1
-1125...41    1
-Name: Is_toxic, Length: 763, dtype: int64, array([1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1,...1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1], dtype=int64), array([0.92471358, 0.93126023, 0.93278689, 0.94262295, 0.93278689]))<br>
-<strong>nlp</strong> = &lt;spacy.lang.pl.Polish object&gt;<br>
-<strong>polish_stop_words</strong> = ['a', 'aby', 'ach', 'acz', 'aczkolwiek', 'aj', 'albo', 'ale', 'alez', 'ależ', 'ani', 'az', 'aż', 'bardziej', 'bardzo', 'beda', 'bedzie', 'bez', 'deda', 'będą', ...]</td></tr></table>
+<td width="100%"><strong>Tuple</strong> = typing.Tuple</td></tr></table>
 </body></html>

@@ -5,6 +5,10 @@ from YT_API import yt_extract
 from yt_detection import youtube_detection
 
 def scan_comment_section():
+    """
+    Call this function when the user clicks 'Skanuj komentarze'
+    Takes input from user, downloads comments from youtube, analyzes them and displays the results
+    """
     url = field_url.get()
     vect_name = vect_name_var.get()
     model_name = model_name_var.get()
@@ -24,10 +28,8 @@ def scan_comment_section():
         return 0
     predicted = youtube_detection(yt_comments, vect_name= vect_name, model_name= model_name, lemmatization= lemmatization)
     yt_comments['IsToxic'] = predicted
-    # Czyszczenie tabeli
     for i in table.get_children():
         table.delete(i)
-    # Dodawanie nowych wierszy do tabeli
     for col, row in yt_comments.iterrows():
         if row['IsToxic'] == 1:
             IsToxic = 'TOKSYCZNY'
@@ -37,6 +39,7 @@ def scan_comment_section():
         if IsToxic == 'TOKSYCZNY':
             table.item(toxic_comment, tags=('bold','red_color'))
 
+# set font and background for the interface here
 font = "Georgia"
 background = '#FFFBF5'
 
@@ -71,7 +74,7 @@ label_limit.pack(side=tk.LEFT, padx=(215, 5))
 field_limit = tk.Entry(frame_limit_title, width=10)
 field_limit.pack(side=tk.LEFT, padx=(0, 100))
 
-# TYTUŁ
+# TITLE
 label_title = tk.Label(frame_limit_title, text="Tytuł filmu: (brak tytułu)", width=400, wraplength=400, background=background,
                        font=(font, 10, 'italic'), anchor='w')
 label_title.pack(side=tk.RIGHT, padx=(20, 50))
@@ -128,11 +131,11 @@ scan_button.bind("<Enter>", on_enter)
 scan_button.bind("<Leave>", on_leave)
 scan_button.pack(pady=15)
 
-# PASEK PRZEWIJANIA
+# SCROLLING BAR
 frame_table = tk.Frame(window)
 frame_table.pack(expand=True, fill='both', padx=10, pady=10)
 
-# TABELA - WYSWIETLA WYNIKI
+# TABLE - DISPLAYS RESULTS
 def fixed_map(option):
     # Fix for setting text colour for Tkinter 8.6.9
     # From: https://core.tcl.tk/tk/info/509cafafae
@@ -157,15 +160,15 @@ table.heading("IsToxic", text="Toksyczność")
 table.pack(side=tk.LEFT, fill='both', expand=True)
 window.update_idletasks()
 
-# PASEK PRZEWIJANIA
+# SCROLLING BAR
 pasek_przewijania = tk.Scrollbar(frame_table, orient="vertical", command=table.yview)
 pasek_przewijania.pack(side=tk.RIGHT, fill='y')
 table.configure(yscrollcommand=pasek_przewijania.set)
 
-# ZMIANA ROZMIARU OKNA
+# ADJUSTING TO CHANGING WINDOW'S SIZE
 def update_columns(event):
     """
-    Function for keeping the right proportion for displayed columns in table
+    Function for keeping the right proportion for displayed columns in a table
     """
     table_width = table.winfo_width()
     is_toxic_width = 100
