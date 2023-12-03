@@ -5,18 +5,10 @@ import pandas as pd
 import re
 # lemmatization
 import spacy
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.metrics import classification_report, accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 # Bag of Words
 from sklearn.feature_extraction.text import CountVectorizer
 # TF-IDF
 from sklearn.feature_extraction.text import TfidfVectorizer
-# Logistic Regression
-from sklearn.linear_model import LogisticRegression
-# SVM
-from sklearn.svm import SVC
-# Naive-Bayes
-from sklearn.naive_bayes import MultinomialNB
 from typing import Tuple
 from joblib import load
 
