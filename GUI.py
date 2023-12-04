@@ -39,6 +39,7 @@ def scan_comment_section():
         if IsToxic == 'TOKSYCZNY':
             table.item(toxic_comment, tags=('bold','red_color'))
 
+
 # set font and background for the interface here
 font = "Georgia"
 background = '#FFFBF5'

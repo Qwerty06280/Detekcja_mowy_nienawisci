@@ -11,7 +11,19 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import Tuple
 from joblib import load
+import os
+import sys
+# import pl_core_news_sm
+# import pl_core_news_lg
 
+def resource_path(relative_path):
+    """
+    creates absolute path to models
+    :param relative_path: relative path
+    :return: absolute path
+    """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
 
 def load_components(lemmatization_method: str = 'quick') -> Tuple:
     """
@@ -22,9 +34,11 @@ def load_components(lemmatization_method: str = 'quick') -> Tuple:
     with open(r'C:\Users\Chill\Desktop\INZYNIERKA\dane\polish_stopwords.txt', 'r', encoding='utf-8') as file:
         polish_stop_words = [row.strip() for row in file]
     if lemmatization_method == 'quick':
-        nlp = spacy.load('pl_core_news_sm')  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_sm-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        #nlp = pl_core_news_sm.load()
     elif lemmatization_method == 'precise':
-        nlp = spacy.load('pl_core_news_lg')  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_lg-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        #nlp = pl_core_news_lg.load()
     else:
         raise ValueError("Wrong argument value")
     return polish_stop_words, nlp
@@ -111,8 +125,8 @@ def load_model_and_vectorizer(vectoraizer_name='Bag of Words', model_name='Logis
     else:
         raise ValueError("Model name is invalid")
     mod_vec_str = f"models_trained/model_{mod}_{vect}"
-    loaded_model = load(f'{mod_vec_str}.joblib')
-    loaded_vectorizer = load(f'models_trained/{vect}.joblib')
+    loaded_model = load(resource_path(f'{mod_vec_str}.joblib'))
+    loaded_vectorizer = load(resource_path(f'models_trained/{vect}.joblib'))
     return loaded_model, loaded_vectorizer
 
 def make_predictions(model, comments, vectoraizer, comments_col='Final_comment'):
