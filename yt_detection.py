@@ -13,8 +13,8 @@ from typing import Tuple
 from joblib import load
 import os
 import sys
-# import pl_core_news_sm
-# import pl_core_news_lg
+import pl_core_news_sm
+import pl_core_news_lg
 
 def resource_path(relative_path):
     """
@@ -34,11 +34,11 @@ def load_components(lemmatization_method: str = 'quick') -> Tuple:
     with open(r'C:\Users\Chill\Desktop\INZYNIERKA\dane\polish_stopwords.txt', 'r', encoding='utf-8') as file:
         polish_stop_words = [row.strip() for row in file]
     if lemmatization_method == 'quick':
-        nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_sm-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
-        #nlp = pl_core_news_sm.load()
+        #nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_sm-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        nlp = pl_core_news_sm.load()
     elif lemmatization_method == 'precise':
-        nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_lg-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
-        #nlp = pl_core_news_lg.load()
+        #nlp = spacy.load(resource_path('spacy\data_lemmatization\pl_core_news_lg-3.7.0'))  # more precise - pl_core_news_lg / less precise & quick pl_core_news_sm
+        nlp = pl_core_news_lg.load()
     else:
         raise ValueError("Wrong argument value")
     return polish_stop_words, nlp
