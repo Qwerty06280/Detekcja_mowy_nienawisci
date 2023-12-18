@@ -6,7 +6,6 @@ python:
 install:
   - "pip install pandas"
   - "pip install sklearn"
-  - "pip install google-api-python-client"
   - "pip install spacy"
 script:
 
