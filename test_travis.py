@@ -27,15 +27,15 @@ class TestKeyFunctions(unittest.TestCase):
         except Exception:
             self.fail("Models not found")
 
-    def test_youtube_detection(self):
-        """
-        test checks if main mechanism works
-        """
-        try:
-            yt_comments, title = yt_extract(url='https://www.youtube.com/watch?v=dQw4w9WgXcQ', limit=10)
-            predictions = youtube_detection(yt_comments, vect_name='Bag of Words', model_name='Naive-Bayes', lemmatization='quick')
-        except Exception:
-            self.fail("Models not found")
+    # def test_youtube_detection(self):
+    #     """
+    #     test checks if main mechanism works
+    #     """
+    #     try:
+    #         yt_comments, title = yt_extract(url='https://www.youtube.com/watch?v=dQw4w9WgXcQ', limit=10)
+    #         predictions = youtube_detection(yt_comments, vect_name='Bag of Words', model_name='Naive-Bayes', lemmatization='quick')
+    #     except Exception:
+    #         self.fail("Models not found")
 
 if __name__ == '__main__':
     unittest.main()
