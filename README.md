@@ -8,6 +8,7 @@ Program można podzielić na 3 główne części:
 - Interfejs graficzny
 
 Aplikacja pozwala użytkownikowi przeskanować sekcję komentarzy pod wybranym filmem na portalu YouTube w celu odszukania toksycznej treści. Interfejs prezentuje się następująco:
+
 ![image](https://github.com/Qwerty06280/Inzynierka/assets/62118154/ab4790cc-5021-403a-acc1-a3aee44e4622)
 
 ### Zawartość repozytorium
