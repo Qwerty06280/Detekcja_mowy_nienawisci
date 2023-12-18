@@ -1,6 +1,6 @@
 # test_my_functions.py
 import unittest
-from YT_API import yt_extract
+#from YT_API import yt_extract
 from yt_detection import load_model_and_vectorizer, youtube_detection
 
 class TestKeyFunctions(unittest.TestCase):
